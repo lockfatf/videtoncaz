@@ -32,10 +32,35 @@ CREATE TABLE IF NOT EXISTS public.events (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Colonnes mots-clés et articles vedettes
+ALTER TABLE public.events ADD COLUMN IF NOT EXISTS tags TEXT[] DEFAULT '{}';
+ALTER TABLE public.events ADD COLUMN IF NOT EXISTS top_articles JSONB DEFAULT '[]';
+
 -- Index pour la recherche géographique
 CREATE INDEX IF NOT EXISTS events_lat_lng_idx ON public.events (lat, lng);
 CREATE INDEX IF NOT EXISTS events_date_idx ON public.events (date);
 CREATE INDEX IF NOT EXISTS events_status_idx ON public.events (status);
+
+-- ============================================================
+-- Storage bucket pour les photos d'articles
+-- ============================================================
+
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('article-images', 'article-images', true)
+ON CONFLICT (id) DO NOTHING;
+
+CREATE POLICY "Images visibles par tous" ON storage.objects
+  FOR SELECT USING (bucket_id = 'article-images');
+
+CREATE POLICY "Utilisateur upload ses images" ON storage.objects
+  FOR INSERT WITH CHECK (
+    bucket_id = 'article-images' AND auth.role() = 'authenticated'
+  );
+
+CREATE POLICY "Utilisateur supprime ses images" ON storage.objects
+  FOR DELETE USING (
+    bucket_id = 'article-images' AND auth.uid()::text = (storage.foldername(name))[1]
+  );
 
 -- ============================================================
 -- Row Level Security (RLS)

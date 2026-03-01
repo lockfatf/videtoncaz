@@ -1,5 +1,12 @@
 export type EventType = 'vide_grenier' | 'vide_maison';
 
+export interface TopArticle {
+  name: string;
+  price: number;
+  description: string;
+  images: string[]; // URLs publiques Supabase Storage, max 3
+}
+
 export interface Event {
   id: string;
   user_id: string;
@@ -17,6 +24,8 @@ export interface Event {
   contact_email: string | null;
   image_url: string | null;
   status: 'active' | 'cancelled' | 'finished';
+  tags: string[];
+  top_articles: TopArticle[];
   created_at: string;
   profiles?: Profile;
 }
@@ -41,4 +50,6 @@ export interface CreateEventForm {
   end_time: string;
   contact_phone: string;
   contact_email: string;
+  tags: string[];
+  top_articles: TopArticle[];
 }

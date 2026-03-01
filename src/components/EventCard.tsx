@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MapPin, Calendar, Clock, Phone, Tag } from 'lucide-react';
+import { MapPin, Calendar, Clock, Phone, Tag, Euro } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import type { Event } from '../lib/types';
@@ -82,6 +82,40 @@ export default function EventCard({ event }: EventCardProps) {
             </div>
           )}
         </div>
+
+        {/* Tags */}
+        {event.tags?.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-3">
+            {event.tags.slice(0, 4).map(tag => (
+              <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                {tag}
+              </span>
+            ))}
+            {event.tags.length > 4 && (
+              <span className="text-xs text-gray-400 px-1">+{event.tags.length - 4}</span>
+            )}
+          </div>
+        )}
+
+        {/* Top articles preview */}
+        {event.top_articles?.length > 0 && (
+          <div className="mt-3 pt-3 border-t border-gray-50">
+            <div className="flex items-center gap-1 text-xs text-gray-500 mb-1.5">
+              <Euro className="w-3 h-3 text-primary-400" />
+              <span className="font-medium">Articles vedettes</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {event.top_articles.slice(0, 3).map((a, i) => (
+                <span key={i} className="text-xs bg-primary-50 text-primary-700 border border-primary-100 px-2 py-0.5 rounded-full font-medium">
+                  {a.name} — {a.price} €
+                </span>
+              ))}
+              {event.top_articles.length > 3 && (
+                <span className="text-xs text-gray-400">+{event.top_articles.length - 3} autres</span>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </Link>
   );

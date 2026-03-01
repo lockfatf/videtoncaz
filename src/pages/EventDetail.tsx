@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { MapPin, Calendar, Clock, Phone, Mail, User, ArrowLeft, Trash2, Pencil, Share2 } from 'lucide-react';
+import { MapPin, Calendar, Clock, Phone, Mail, User, ArrowLeft, Trash2, Pencil, Share2, Tag, Euro } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { supabase } from '../lib/supabase';
@@ -193,6 +193,56 @@ export default function EventDetail() {
               </div>
             )}
           </div>
+
+          {/* Tags */}
+          {event.tags?.length > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <Tag className="w-4 h-4 text-primary-500" />
+                <span className="text-sm font-semibold text-gray-700">Ce qu'on y trouve</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {event.tags.map(tag => (
+                  <span key={tag} className="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Top articles */}
+          {event.top_articles?.length > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-3">
+                <Euro className="w-4 h-4 text-primary-500" />
+                <span className="text-sm font-semibold text-gray-700">Articles vedettes</span>
+              </div>
+              <div className="space-y-3">
+                {event.top_articles.map((a, i) => (
+                  <div key={i} className="bg-gradient-to-br from-primary-50 to-orange-50 border border-primary-100 rounded-xl p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="font-semibold text-gray-900 text-base">{a.name}</p>
+                      <span className="text-xl font-bold text-primary-600 ml-4 flex-shrink-0">{a.price} €</span>
+                    </div>
+                    {a.description && (
+                      <p className="text-sm text-gray-600 mb-3">{a.description}</p>
+                    )}
+                    {a.images?.length > 0 && (
+                      <div className="flex gap-2 overflow-x-auto pb-1">
+                        {a.images.map((url, pi) => (
+                          <a key={pi} href={url} target="_blank" rel="noreferrer"
+                            className="flex-shrink-0 w-28 h-28 rounded-xl overflow-hidden border border-white shadow-sm hover:shadow-md transition-shadow">
+                            <img src={url} alt={`${a.name} photo ${pi + 1}`} className="w-full h-full object-cover" />
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Mini map */}
           <div className="rounded-xl overflow-hidden" style={{ height: 280 }}>
