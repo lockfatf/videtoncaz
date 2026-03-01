@@ -34,7 +34,7 @@ export default function FilterBar({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Rechercher par ville, titre..."
+            placeholder="Ville, titre, catégorie, article (ex: frigo, vélo, meuble...)"
             value={search}
             onChange={e => onSearchChange(e.target.value)}
             className="input-field pl-9 py-2.5 text-sm"

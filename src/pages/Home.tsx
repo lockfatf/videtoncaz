@@ -47,11 +47,17 @@ export default function Home() {
       if (typeFilter !== 'all' && e.type !== typeFilter) return false;
       if (search) {
         const q = search.toLowerCase();
+        const inTags = (e.tags || []).some(t => t.toLowerCase().includes(q));
+        const inArticles = (e.top_articles || []).some(
+          a => a.name.toLowerCase().includes(q) || (a.description || '').toLowerCase().includes(q)
+        );
         return (
           e.title.toLowerCase().includes(q) ||
           e.city.toLowerCase().includes(q) ||
           e.address.toLowerCase().includes(q) ||
-          (e.description || '').toLowerCase().includes(q)
+          (e.description || '').toLowerCase().includes(q) ||
+          inTags ||
+          inArticles
         );
       }
       return true;
