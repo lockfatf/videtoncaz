@@ -59,7 +59,7 @@ export default function Home() {
   }, [events, search, typeFilter, dateFrom, dateTo]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-64px)]">
+    <div className="flex flex-col flex-1 min-h-0">
       <FilterBar
         search={search}
         onSearchChange={setSearch}

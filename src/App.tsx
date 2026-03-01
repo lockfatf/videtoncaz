@@ -2,12 +2,14 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { isSupabaseConfigured } from './lib/supabase';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Home from './pages/Home';
 import EventDetail from './pages/EventDetail';
 import CreateEvent from './pages/CreateEvent';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
+import MentionsLegales from './pages/MentionsLegales';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -17,7 +19,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function AppRoutes() {
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
+    <div className="min-h-screen bg-gray-50 font-sans flex flex-col">
       <Navbar />
       {!isSupabaseConfigured && (
         <div className="bg-amber-50 border-b border-amber-200 px-4 py-2.5 text-center text-sm text-amber-800">
@@ -54,8 +56,10 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route path="/mentions-legales" element={<MentionsLegales />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <Footer />
     </div>
   );
 }
